@@ -1,4 +1,18 @@
+# 系统/编辑器
 .DS_Store
 .env
+
+# Node
 node_modules/
+web/dist/
+web/playwright-report/
+web/test-results/
+*.tsbuildinfo
+npm-debug.log*
+
+# Python
 __pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/

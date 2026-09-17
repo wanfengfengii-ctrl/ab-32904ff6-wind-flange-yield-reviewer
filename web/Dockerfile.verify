@@ -1,0 +1,19 @@
+# 一次性验收镜像：Node + 预装 Chromium，运行 Playwright E2E。
+# 镜像大版本须与 @playwright/test 一致（1.63.x，浏览器位于 /ms-playwright）。
+FROM mcr.microsoft.com/playwright:v1.63.0-noble
+
+# 基础镜像默认以非 root 用户 pwuser 运行；构建期切到 root 安装依赖，
+# 运行前再切回 pwuser（Chromium 沙箱要求非 root）。
+USER root
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY tsconfig.json vite.config.ts playwright.config.ts index.html ./
+COPY src ./src
+COPY e2e ./e2e
+RUN chown -R pwuser:pwuser /app
+
+USER pwuser
+CMD ["npx", "playwright", "test"]

@@ -1,0 +1,36 @@
+{
+  "curve": {
+    "name": "示例螺栓 T-01",
+    "points": [
+      { "angle": 0, "torque": 5 },
+      { "angle": 10, "torque": 25 },
+      { "angle": 20, "torque": 45 },
+      { "angle": 30, "torque": 65 },
+      { "angle": 40, "torque": 85 },
+      { "angle": 50, "torque": 105 },
+      { "angle": 60, "torque": 125 },
+      { "angle": 70, "torque": 145 },
+      { "angle": 80, "torque": 405 },
+      { "angle": 90, "torque": 455 },
+      { "angle": 100, "torque": 505 },
+      { "angle": 110, "torque": 555 },
+      { "angle": 120, "torque": 605 },
+      { "angle": 130, "torque": 655 },
+      { "angle": 140, "torque": 705 },
+      { "angle": 150, "torque": 755 },
+      { "angle": 160, "torque": 165 },
+      { "angle": 170, "torque": 175 },
+      { "angle": 180, "torque": 185 },
+      { "angle": 190, "torque": 195 },
+      { "angle": 200, "torque": 205 },
+      { "angle": 210, "torque": 215 },
+      { "angle": 220, "torque": 225 },
+      { "angle": 230, "torque": 235 }
+    ]
+  },
+  "threshold": {
+    "slope_min": "0.1",
+    "slope_max": "10",
+    "yield_ratio_max": "0.5"
+  }
+}

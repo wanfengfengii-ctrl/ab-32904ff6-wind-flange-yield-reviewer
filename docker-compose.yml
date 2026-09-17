@@ -1,0 +1,53 @@
+# 海上风机法兰螺栓复核台 —— 编排
+#
+#   docker compose up --build         # 仅运行 web、api 两个常驻服务
+#   docker compose run --rm verify    # 一次性验收（Playwright 联调），结束即退出
+#
+# 宿主端口可用环境变量覆盖：WEB_PORT（默认 8080）、API_PORT（默认 8000）。
+
+services:
+  api:
+    build: ./api
+    image: flange-review-api
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status == 200 else 1)"
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  web:
+    build: ./web
+    image: flange-review-web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  # 一次性验收服务：默认 `up` 不会启动（verify profile），
+  # 仅通过 `docker compose run --rm verify` 运行，退出码即验收结论。
+  verify:
+    profiles: ["verify"]
+    build:
+      context: ./web
+      dockerfile: Dockerfile.verify
+    image: flange-review-verify
+    environment:
+      E2E_BASE_URL: http://web
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    command: ["npx", "playwright", "test"]
